@@ -14,7 +14,7 @@
     "url": "git+https://github.com/spellcraft-aws-auth.git"
   },
   "config": {
-    "spellcraft_module_default_name": "packer"
+    "spellcraft_module_default_name": "awsauth"
   },
   "author": "",
   "license": "MIT",
