@@ -1,0 +1,36 @@
+{
+  "name": "spellcraft-aws-auth",
+  "version": "1.0.0",
+  "main": "module.js",
+  "scripts": {
+    "test": "node utils/test.js",
+    "doc": "jsdoc -c utils/jsdoc.json --verbose"
+  },
+  "bin": {
+    "cli": "utils/cli-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spellcraft-aws-auth.git"
+  },
+  "config": {
+    "spellcraft_module_default_name": "packer"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spellcraft-aws-auth/issues"
+  },
+  "homepage": "https://github.com/spellcraft-aws-auth#readme",
+  "description": "A plugin to expose Hashicorp Packer via @c6fc/spellcraft",
+  "devDependencies": {
+    "@c6fc/spellcraft": "^0.0.1",
+    "clean-jsdoc-theme": "^4.3.0",
+    "jsdoc": "^4.0.4",
+    "yargs": "^18.0.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "ini": "^5.0.0"
+  }
+}
