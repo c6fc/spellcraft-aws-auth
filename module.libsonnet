@@ -12,20 +12,17 @@
 	 * @function client
 	 * @param {string} service
 	 * @param {object} [params={}]
-	 * @param {string} method
 	 * @memberof module:spellcraft-aws-auth
-	 * @returns {Class.AWS}
+	 * @decription
+	 * Creates an instance of the AWS service client which can be used to make API calls.
+	 * This is only necessary if the client instantiation requires non-default parameters
+	 * such as 'region'. Otherwise, aws.call() below is simpler.
+	 * @returns {Class.AWS[service]}
 	 * @example
-	 * local foo = import "foo";
+	 * local aws = import "aws";
 	 * local stsClient = aws.client('STS', { region: "us-east-1" });
 	 *
-	 * { identity: aws.api(stsClient,'getCallerIdentity') }
-	 * 
-	 * // Returns:
-	 * { "identity": {
-	 *	"UserArn": "<your_user_arn>",
-	 *	""
-	 } }
+	 * { identity: aws.api(stsClient,'getCallerIdentity') }	 * 
 	 */
 	client(service, params={}):: {
 		service: service,
@@ -33,18 +30,21 @@
 	},
 
 	/**
-	 * @function beefcakecafe
-	 * @param {string} say
+	 * @function api
+	 * @param {Class.AWS[service]} client
+	 * @param {string} method
+	 * @param {object} [params={}]
 	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
+	 * @decription
+	 * Makes an AWS API call using the provided client, of the specified method
+	 * and with the supplied parameters.
+	 * @returns {string} result
 	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
+	 * local aws = import "aws";
+	 * local stsClient = aws.client('STS', { region: "us-east-1" });
+	 *
+	 * { identity: aws.api(stsClient,'getCallerIdentity') }	 * 
 	 */
-
 	api(clientObj, method, params=""):: std.native('aws')(
 		std.manifestJsonEx(clientObj, ''),
 		method,
@@ -52,19 +52,19 @@
 	),
 
 	/**
-	 * Returns 'moo'
-	 * This is a libsonnet module rather than a JavaScript native function.
-	 *
-	 * @function beefcakecafe
-	 * @param {string} say
+	 * @function call
+	 * @param {Class.AWS[service]} client
+	 * @param {string} method
+	 * @param {object} [params={}]
 	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
+	 * @decription
+	 * This is a shortcut for calling aws.api(aws.client(service, {}), method)
+	 * Useful for when your service client requires no extra parameters.
+	 * @returns {string} result
 	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
+	 * local aws = import "aws";
+	 *
+	 * { identity: aws.call('STS','getCallerIdentity') }	 * 
 	 */
 	call(name, method, params=""):: aws.api(
 		aws.client(name),
@@ -73,76 +73,39 @@
 	),
 
 	/**
-	 * Returns 'moo'
-	 * This is a libsonnet module rather than a JavaScript native function.
-	 *
-	 * @function beefcakecafe
-	 * @param {string} say
+	 * @function assertIdentity
+	 * @param {string} method
 	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
+	 * @decription
+	 * Terminates manifestation if the current AWS identity ARN doesn't match the provided
+	 * value. Useful for sanity checking prior to deploment.
+	 * @returns {string} result
 	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
+	 * local aws = import "aws";
+	 *
+	 * { identity:: aws.assertIdentity('arn:aws:iam:123456789012:user/you') }	 * 
 	 */
 	assertIdentity(arn)::
 		assert aws.getCallerIdentity().Arn == arn : "Not authenticated as [ %s ]" % [arn];
 		arn,
 
 	/**
-	 * Returns 'moo'
-	 * This is a libsonnet module rather than a JavaScript native function.
-	 *
-	 * @function beefcakecafe
-	 * @param {string} say
+	 * @function getCallerIdentity
 	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
+	 * @decription
+	 * Returns details of the current AWS security principal context
 	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
+	 * local aws = import "aws";
+	 *
+	 * { identity: aws.getCallerIdentity() }	 * 
 	 */
 	getCallerIdentity():: aws.call('STS', 'getCallerIdentity'),
 
-	/**
-	 * Returns 'moo'
-	 * This is a libsonnet module rather than a JavaScript native function.
-	 *
-	 * @function beefcakecafe
-	 * @param {string} say
-	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
-	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
-	 */
 	getRegionsList():: std.map(
 		function (x) x.RegionName,
 		aws.call('EC2', 'describeRegions').Regions
 	),
 
-	/**
-	 * Returns 'moo'
-	 * This is a libsonnet module rather than a JavaScript native function.
-	 *
-	 * @function beefcakecafe
-	 * @param {string} say
-	 * @memberof module:spellcraft-aws-auth
-	 * @returns {string} `moo (${say})`
-	 * @example
-	 * local foo = import "foo";
-	 * { cow: foo.beefcakecafe("hello") }
-	 * 
-	 * // Returns:
-	 * { "cow": "moo (hello)" }
-	 */
 	getAvailabilityZones():: {
 		[region]: std.map(
 			function (x) x.ZoneName,

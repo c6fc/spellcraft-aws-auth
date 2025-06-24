@@ -24,12 +24,12 @@
   "homepage": "https://github.com/spellcraft-aws-auth#readme",
   "description": "A plugin to expose Hashicorp Packer via @c6fc/spellcraft",
   "devDependencies": {
-    "@c6fc/spellcraft": "^0.0.1",
     "clean-jsdoc-theme": "^4.3.0",
     "jsdoc": "^4.0.4",
     "yargs": "^18.0.0"
   },
   "dependencies": {
+    "@c6fc/spellcraft": "^0.0.1",
     "aws-sdk": "^2.1692.0",
     "ini": "^5.0.0"
   }
