@@ -1,6 +1,6 @@
 {
-  "name": "spellcraft-aws-auth",
-  "version": "1.0.0",
+  "name": "@c6fc/spellcraft-aws-auth",
+  "version": "1.0.3",
   "main": "module.js",
   "scripts": {
     "test": "node utils/test.js",
@@ -11,18 +11,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spellcraft-aws-auth.git"
+    "url": "git+https://github.com/c6fc/spellcraft-aws-auth.git"
   },
   "config": {
     "spellcraft_module_default_name": "awsauth"
   },
-  "author": "",
+  "author": "Brad Woodward (brad@bradwoodward.io)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/spellcraft-aws-auth/issues"
+    "url": "https://github.com/c6fc/spellcraft-aws-auth/issues"
   },
-  "homepage": "https://github.com/spellcraft-aws-auth#readme",
-  "description": "A plugin to expose Hashicorp Packer via @c6fc/spellcraft",
+  "homepage": "https://github.com/c6fc/spellcraft-aws-auth#readme",
+  "description": "A plugin to empower @c6fc/spellcraft with AWS",
   "devDependencies": {
     "clean-jsdoc-theme": "^4.3.0",
     "jsdoc": "^4.0.4",

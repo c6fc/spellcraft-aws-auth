@@ -1,7 +1,7 @@
 # SpellCraft Packer Integration
 
-[![NPM version](https://img.shields.io/npm/v/spellcraft-aws-auth.svg?style=flat)](https://www.npmjs.com/package/spellcraft-aws-auth)
-[![License](https://img.shields.io/npm/l/spellcraft-aws-auth.svg?style=flat)](https://opensource.org/licenses/MIT)
+[![NPM version](https://img.shields.io/npm/v/@c6fc/spellcraft-aws-auth.svg?style=flat)](https://www.npmjs.com/package/@c6fc/spellcraft-aws-auth)
+[![License](https://img.shields.io/npm/l/@c6fc/spellcraft-aws-auth.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 Seamlessly integrate [AWS SDK for JavaScript (v2)](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/) into your [SpellCraft](https://github.com/@c6fc/spellcraft) SpellFrames. This plugin allows you to natively expose authenticated AWS contexts or role-chains to your SpellFrames, and use the full power of the SDK in both JavaScript native functions and JSonnet.
 
