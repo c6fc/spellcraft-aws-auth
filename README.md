@@ -1,4 +1,4 @@
-# SpellCraft Packer Integration
+# SpellCraft AWS Integration
 
 [![NPM version](https://img.shields.io/npm/v/@c6fc/spellcraft-aws-auth.svg?style=flat)](https://www.npmjs.com/package/@c6fc/spellcraft-aws-auth)
 [![License](https://img.shields.io/npm/l/@c6fc/spellcraft-aws-auth.svg?style=flat)](https://opensource.org/licenses/MIT)
