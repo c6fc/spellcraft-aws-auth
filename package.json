@@ -1,13 +1,11 @@
 {
   "name": "@c6fc/spellcraft-aws-auth",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "module.js",
   "scripts": {
+    "cli": "utils/cli-test.js",
     "test": "node utils/test.js",
     "doc": "jsdoc -c utils/jsdoc.json --verbose"
-  },
-  "bin": {
-    "cli": "utils/cli-test.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +27,7 @@
     "yargs": "^18.0.0"
   },
   "dependencies": {
-    "@c6fc/spellcraft": "^0.0.1",
+    "@c6fc/spellcraft": "0.0.5",
     "aws-sdk": "^2.1692.0",
     "ini": "^5.0.0"
   }

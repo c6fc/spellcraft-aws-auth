@@ -35,7 +35,7 @@ exports._spellcraft_metadata = {
 
 			});
 
-		console.log(`[+] Imported SpellFrame CLI extensions for spellcraft-aws-auth`);
+		console.log(`[+] Imported SpellFrame CLI extensions for @c6fc/spellcraft-aws-auth`);
 	},
 	init: async () => {
 		setAwsCredentials();
@@ -455,7 +455,7 @@ async function getBootstrapBucket() {
  * export AWS_PROFILE=default
  * spellcraft aws-identity
  *
- * // Returns:
+ * # Returns:
  * {
  * 	UserId: 'AIDAEXAMPLEYQR4QJD6WG',
  * 	Account: '123456789012',
@@ -465,52 +465,20 @@ async function getBootstrapBucket() {
  */
 
 /**
+ * Outputs the current credential context as environment variables. Useful
+ * for reusing credentials from role assumption in other tools.
+ * 
  * @name aws-exportcredentials
  * @function
  * @memberof module:spellcraft-aws-auth-cli
  *
  * @example
  * # Render config.jsonnet, then run packer init and packer build
- * spellcraft foo ./config.jsonnet
+ * SPELLCRAFT_ASSUMEROLE="arn:aws:iam::123456789012:role/myDeploymentRole"
+ * spellcraft export-credentials
  *
- * @example
- * # Render config.jsonnet, skip packer init, then run packer build
- * spellcraft foo ./config.jsonnet --bar
- * spellcraft foo ./config.jsonnet -b
- */
-
-/**
- * @name aws-exportcredentials
- * @function
- * @memberof module:spellcraft-aws-auth-cli
- * @param {string} filename - The path to the Jsonnet configuration file to consume. (Required)
- * @param {boolean} [bar=false] - If true, outputs `bar` instead.
- *                                         Alias: `-b`.
- *
- * @example
- * # Render config.jsonnet, then run packer init and packer build
- * spellcraft foo ./config.jsonnet
- *
- * @example
- * # Render config.jsonnet, skip packer init, then run packer build
- * spellcraft foo ./config.jsonnet --bar
- * spellcraft foo ./config.jsonnet -b
- */
-
-/**
- * @name aws-exportcredentials
- * @function
- * @memberof module:spellcraft-aws-auth-cli
- * @param {string} filename - The path to the Jsonnet configuration file to consume. (Required)
- * @param {boolean} [bar=false] - If true, outputs `bar` instead.
- *                                         Alias: `-b`.
- *
- * @example
- * # Render config.jsonnet, then run packer init and packer build
- * spellcraft foo ./config.jsonnet
- *
- * @example
- * # Render config.jsonnet, skip packer init, then run packer build
- * spellcraft foo ./config.jsonnet --bar
- * spellcraft foo ./config.jsonnet -b
+ * # Returns:
+ * export AWS_ACCESS_KEY_ID=<access key from role assumption>
+ * export AWS_SECRET_ACCESS_KEY=<secret key from role assumption>
+ * export AWS_SESSION_TOKEN=<session token from role assumption>
  */
