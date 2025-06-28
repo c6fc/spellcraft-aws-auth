@@ -16,7 +16,7 @@ const ini = require("ini");
 const path = require("path");
 const readline = require("readline");
 
-const authCache = {};
+let authCache = false;
 
 exports._spellcraft_metadata = {
 	functionContext: { aws },
@@ -44,7 +44,11 @@ exports._spellcraft_metadata = {
 	}
 }
 
-exports.aws_auth = [function() {
+exports.aws_auth = [async function() {
+	if (authCache === false) {
+		await verifyCredentials();
+	}
+
 	return authCache;
 }]
 
