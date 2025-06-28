@@ -16,8 +16,6 @@ const ini = require("ini");
 const path = require("path");
 const readline = require("readline");
 
-let authCache = false;
-
 exports._spellcraft_metadata = {
 	functionContext: { aws },
 	cliExtensions: (yargs, spellframe) => {
@@ -43,14 +41,6 @@ exports._spellcraft_metadata = {
 		setAwsCredentials();
 	}
 }
-
-exports.aws_auth = [async function() {
-	if (authCache === false) {
-		await verifyCredentials();
-	}
-
-	return authCache;
-}]
 
 exports.aws = [async function (clientObj, method, params) {
 		clientObj = JSON.parse(clientObj);
@@ -329,8 +319,7 @@ async function verifyCredentials() {
 	try {
 		const caller = await sts.getCallerIdentity().promise();
 		delete caller.ResponseMetadata;
-		authCache = caller;
-		return authCache;
+		return caller;
 	} catch (e) {
 		throw new Error(`[!] Credential validation failed with error: ${e}`);
 	}

@@ -1,6 +1,6 @@
 {
   "name": "@c6fc/spellcraft-aws-auth",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "module.js",
   "scripts": {
     "cli": "utils/cli-test.js",
