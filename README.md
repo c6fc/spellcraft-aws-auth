@@ -66,6 +66,11 @@ Extends the SpellFrame's `init()` to include obtaining AWS credentials, and opti
 
 Exposes an instance of the AWS-SDK v2 as `aws` for all native function executions.
 
+## JavaScript native functions
+
+*	`aws` - Wraps the authenticated instantiation of the AWS-SDK to allow for direct API calls
+*	`aws_auth` - Returns a cached result of STS getCallerIdentity; most useful for dependent module integration.
+
 ## Exposed module functions
 
 Exposes the following functions to JSonnet through the import module:

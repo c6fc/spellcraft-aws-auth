@@ -16,6 +16,8 @@ const ini = require("ini");
 const path = require("path");
 const readline = require("readline");
 
+const authCache = {};
+
 exports._spellcraft_metadata = {
 	functionContext: { aws },
 	cliExtensions: (yargs, spellframe) => {
@@ -41,6 +43,10 @@ exports._spellcraft_metadata = {
 		setAwsCredentials();
 	}
 }
+
+exports.aws_auth = [function() {
+	return authCache;
+}]
 
 exports.aws = [async function (clientObj, method, params) {
 		clientObj = JSON.parse(clientObj);
@@ -319,130 +325,11 @@ async function verifyCredentials() {
 	try {
 		const caller = await sts.getCallerIdentity().promise();
 		delete caller.ResponseMetadata;
-		return caller;
+		authCache = caller;
+		return authCache;
 	} catch (e) {
 		throw new Error(`[!] Credential validation failed with error: ${e}`);
 	}
-}
-
-async function bootstrap(project) {
-	const s3 = new aws.S3();
-	
-	let bucketName;
-	let bootstrapBucket = await getBootstrapBucket();
-
-	if (!bootstrapBucket) {
-		bucketName = `spellcraft-${Math.random().toString(36).replace(/[^a-z]+/g, '')}-${Math.round(Date.now() / 1000)}`;
-
-		try {
-			await s3.createBucket({
-				Bucket: bucketName
-			}).promise();
-
-			await s3.putBucketTagging({
-				Bucket: bucketName,
-				Tagging: {
-					TagSet: [{
-						Key: "spellcraft-backend",
-						Value: "true"
-					}]
-				}
-			}).promise();
-
-			await s3.putBucketVersioning({
-				Bucket: bucketName,
-				VersioningConfiguration: {
-					MFADelete: "Disabled",
-					Status: "Enabled"
-				}
-			}).promise();
-
-			await s3.putPublicAccessBlock({
-				Bucket: bucketName,
-				PublicAccessBlockConfiguration: {
-					BlockPublicAcls: true,
-					BlockPublicPolicy: true,
-					IgnorePublicAcls: true,
-					RestrictPublicBuckets: true
-				}
-			}).promise();
-
-			await s3.putBucketPolicy({
-				Bucket: bucketName,
-				Policy: JSON.stringify({
-					Version: "2012-10-17",
-					Statement: [{
-						Sid: "AllowSSLOnly",
-						Principal: "*",
-						Action: "s3:*",
-						Effect: "Deny",
-						Resource: [
-							`arn:aws:s3:::${bucketName}`,
-							`arn:aws:s3:::${bucketName}/*`
-						],
-						Condition: {
-							Bool: {
-								"aws:SecureTransport": false
-							}
-						}
-					}]
-				})
-			}).promise();
-		} catch (e) {
-			console.log(`SpellCraft error: Unable to create bucket: ${e}`);
-			process.exit(1);
-		}
-
-		console.log(`[+] Created bootstrap bucket ${bucketName}`);
-
-		bootstrapBucket = `arn:aws:s3:::${bucketName}`;
-	} else {
-		bucketName = bootstrapBucket;
-		console.log(`[+] Using bootstrap bucket ${bucketName}`);
-	}
-
-	let bootstrapLocation = await s3.getBucketLocation({
-		Bucket: bucketName
-	}).promise();
-
-	bootstrapLocation = (bootstrapLocation.LocationConstraint == '') ? "us-east-1" : bootstrapLocation.LocationConstraint;
-
-	this.projectName = project;
-	this.bootstrapBucket = bootstrapBucket;
-	this.bootstrapLocation = bootstrapLocation;
-
-	return {
-		terraform: {
-			backend: {
-				s3: {
-					bucket: bucketName,
-					key: `spellcraft/${project}/terraform.tfstate`,
-					region: bootstrapLocation
-				}
-			}
-		}
-	}
-}
-
-async function getBootstrapBucket() {
-
-	const s3 = new aws.S3();
-	const buckets = await s3.listBuckets().promise();
-
-	const arns = buckets.Buckets
-		.map(e => e.Name)
-		.filter(e => /^spellcraft-[a-z]*?-\d{10}$/.test(e));
-
-	if (arns.length == 1) {
-		return arns[0];
-	}
-
-	if (arns.length > 1) {
-		console.log("[!] More than one bootstrap bucket exists in this account. Fix this before continuing.");
-		return process.exit(1);
-	}
-
-	return false;
 }
 
 /**
